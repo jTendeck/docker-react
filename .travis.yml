@@ -1,0 +1,11 @@
+sudo: required # Give super user permissions
+language: generic
+
+services: 
+  - docker # tell Travis to install Docker
+
+before_install: # Run before tests are run; setup
+  - docker build -t acrophobicowl/docker-react -f Dockerfile.dev . # Build image; we need to add a tag so we can refer to this image in future commands
+
+script: # commands needed to run test
+  - docker run -e CI=true acrophobicowl/docker-react npm run test -- --coverage # -- --coverage ensures the test exits when complete
