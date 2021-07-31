@@ -9,3 +9,16 @@ before_install: # Run before tests are run; setup
 
 script: # commands needed to run test
   - docker run -e CI=true acrophobicowl/docker-react npm run test -- --coverage # -- --coverage ensures the test exits when complete
+
+deploy:
+  provider: elasticbeanstalk # Travis has built in config for some services, such as EBS
+  region: us-west-2
+  app: "docker-react" # EBS app name when creating EBS app
+  env: "Dockerreact-env"  # EBS environment
+  bucket_name: "elasticbeanstalk-us-west-2-944047486125" # S3 bucket used by EBS
+  bucket_path: "docker-react" # Same as "app"
+  on:
+    branch: master # Only trigger when pushing code to master
+  access_key_id: $AWS_ACCESS_KEY # Environment variables; stored in the Travis console
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
